@@ -15,16 +15,23 @@ function activate(context) {
 		const document = editor.document;
 		const languageId = document.languageId;
 		
-		if (editor && languageId==='html') {
-		  let text = '<!DOCTYPE html>\n<html>\n<head>\n\t<title></title>\n</head>\n<body>\n<h1>Hello, World!</h1>\n</body>\n</html>';
-		  editor.edit((editBuilder) => {
-			editBuilder.insert(editor.selection.start, text);
-		  });
-		}
-		else if(languageId!='html')
-		{
-			vscode.window.showInformationMessage(`Selected file language is ${languageId} and not HTML`);
-		}
+		switch (true) {
+			case (editor && languageId === 'html'): {
+			  let text = '<!DOCTYPE html>\n<html>\n<head>\n\t<title></title>\n</head>\n<body>\n<h1>Hello, World!</h1>\n</body>\n</html>';
+			  editor.edit((editBuilder) => {
+				editBuilder.insert(editor.selection.start, text);
+			  });
+			  break;
+			}
+			case (languageId !== 'html'): {
+			  vscode.window.showInformationMessage(`Selected file language is ${languageId} and not HTML`);
+			  break;
+			}
+			default: {
+				vscode.window.showErrorMessage('Failed to access the file.');
+				break;
+			  }
+		  }
   });
 	context.subscriptions.push(disposable);
 }
